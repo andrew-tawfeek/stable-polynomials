@@ -1,0 +1,9 @@
+#M matrix, s 'iratable' of indices of rows and columns to keep, e.g. [x,y,z] subset of [n], not necc. sorted
+def principal_submatrix(M, s, sort=False):
+    if sort:
+        s = sorted(s)
+    return M[s, s]
+
+#TODO:
+#for the next step of getting all ordered sequences of k pairwise disjoint subsets of [n], see:
+#https://doc.sagemath.org/html/en/reference/combinat/sage/combinat/set_partition_ordered.html
