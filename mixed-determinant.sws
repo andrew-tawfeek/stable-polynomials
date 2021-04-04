@@ -1,9 +1,38 @@
+#life easier:
+def apply(L,fn):
+    res = []
+    for elt in L:
+        res = res + [fn(elt)]
+    return res
+
+################################################
+
+
+
 #M matrix, s 'iratable' of indices of rows and columns to keep, e.g. [x,y,z] subset of [n], not necc. sorted
 def principal_submatrix(M, s, sort=False):
+    s = [x-1 for x in s]
     if sort:
         s = sorted(s)
     return M[s, s]
 
-#TODO:
-#for the next step of getting all ordered sequences of k pairwise disjoint subsets of [n], see:
-#https://doc.sagemath.org/html/en/reference/combinat/sage/combinat/set_partition_ordered.html
+#gives all ordered sequences of k pairwise disjont subsets of [n] s.t. [n] is union of all
+def AllOrderedSetPartitions(n,k):
+    L = [ x for x in OrderedSetPartitions([0..n]).list() if len(x)==k]
+    return [ [list(s-{0}) for s in x] for x in L ]                              #rids of 0's
+
+#input is a list L of matrices of the same square dimension
+def MixedDet(L):
+    k = len(L)
+    n = len(L[0].rows())
+    ordered_sequences = AllOrderedSetPartitions(n,k)
+    sum = 0
+    for tuple in ordered_sequences:
+        product = 1
+        for elt in tuple:
+            for i in range(len(L)):
+                product = product*principal_submatrix(L[i],elt).det()
+        sum = sum + product
+    return sum
+
+#TODO: Above needs fixing, not giving right answer
